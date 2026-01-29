@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Data.Interfaces.IRepositorio
 {
     public interface IUnidadTrabajo : IDisposable
     {
-        ICategoriaRepositorio Categoria {  get; }
+        ICancionRepositorio Cancion { get; }
+        ICategoriaRepositorio Categoria { get; }
+        IDevocionalRepositorio Devocional { get; }
+        IDevocionalCancionRepositorio DevocionalCancion { get; }
+        IUsuarioRepositorio Usuario { get; }
 
         Task Guardar();
     }

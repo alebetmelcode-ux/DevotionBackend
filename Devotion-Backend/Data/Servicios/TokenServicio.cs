@@ -2,30 +2,35 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models.Entidades;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims; // ← AGREGADO
+using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Servicios
 {
     public class TokenServicio : ITokenServicio
     {
         private readonly SymmetricSecurityKey _key;
+        private readonly string _issuer;
+        private readonly string _audience;
 
         public TokenServicio(IConfiguration config)
         {
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+            var tokenKey = config["Jwt:Key"]
+                ?? throw new ArgumentNullException("Jwt:Key no configurado");
+
+            _issuer = config["Jwt:Issuer"] ?? "DevotionApi";
+            _audience = config["Jwt:Audience"] ?? "DevotionClient";
+
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
         }
 
         public string CrearToken(Usuario usuario)
         {
-            var claims = new List<Claim> // ← CORREGIDO: Agregada llave de apertura
+            var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, usuario.Username)
+                new Claim(ClaimTypes.NameIdentifier, usuario.Username),
+                new Claim(ClaimTypes.Name, usuario.Username)
             };
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
@@ -33,7 +38,9 @@ namespace Data.Servicios
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7), // ← CORREGIDO: Cambiado a UtcNow
+                Expires = DateTime.UtcNow.AddDays(7),
+                Issuer = _issuer,
+                Audience = _audience,
                 SigningCredentials = creds
             };
 

@@ -1,30 +1,38 @@
-﻿using Data.Interfaces.IRepositorio;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Interfaces;
+using Data.Interfaces.IRepositorio;
+using Data.Repositorio;
 
 namespace Data.Repositorio
 {
     public class UnidadTrabajo : IUnidadTrabajo
     {
         private readonly ApplicationDbContext _db;
-        public ICategoriaRepositorio Categoria {  get; private set; }
+
+        public ICancionRepositorio Cancion { get; private set; }
+        public ICategoriaRepositorio Categoria { get; private set; }
+        public IDevocionalRepositorio Devocional { get; private set; }
+        public IDevocionalCancionRepositorio DevocionalCancion { get; private set; }
+        public IUsuarioRepositorio Usuario { get; private set; }
 
         public UnidadTrabajo(ApplicationDbContext db)
         {
             _db = db;
+
+            Cancion = new CancionRepositorio(db);
             Categoria = new CategoriaRepositorio(db);
-        }
-        public void Dispose()
-        {
-            _db.Dispose();
+            Devocional = new DevocionalRepositorio(db);
+            DevocionalCancion = new DevocionalCancionRepositorio(db);
+            Usuario = new UsuarioRepositorio(db);
         }
 
         public async Task Guardar()
         {
             await _db.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            _db.Dispose();
         }
     }
 }

@@ -20,6 +20,12 @@ namespace Data
         }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Devocional> Devocionales { get; set; }
+        public DbSet<DevocionalCancion> DevocionalCanciones { get; set; }
+
+        public DbSet<Cancion> Canciones { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

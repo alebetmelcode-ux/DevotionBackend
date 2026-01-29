@@ -1,19 +1,34 @@
 ﻿using AutoMapper;
 using Models.DTOs;
 using Models.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utilidades
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile()  
+        public MappingProfile()
         {
-            CreateMap<Categoria, CategoriaDto>();
+            // ============================
+            // CATEGORIA
+            // ============================
+            CreateMap<Categoria, CategoriaDto>().ReverseMap();
+
+            // ============================
+            // CANCION
+            // ============================
+            CreateMap<Cancion, CancionDto>().ReverseMap();
+            CreateMap<CrearCancionDto, Cancion>();
+
+            // ============================
+            // DEVOCIONAL
+            // ============================
+            CreateMap<Devocional, DevocionalDto>().ReverseMap();
+
+            // ============================
+            // DEVOCIONAL - CANCION
+            // ============================
+            CreateMap<DevocionalCancion, DevocionalCancionDto>().ReverseMap();
+            CreateMap<DevocionalCancion, DevocionalCancionDetalleDto>();
         }
     }
 }

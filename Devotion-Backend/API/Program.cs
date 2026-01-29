@@ -1,24 +1,30 @@
 using API.Extensiones;
 using API.Middleware;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// =====================
+// Servicios
+// =====================
 
 builder.Services.AddControllers();
+
 builder.Services.AgregarServiciosAplicacion(builder.Configuration);
 builder.Services.AgregarServiciosIdentidad(builder.Configuration);
 
-
+// =====================
+// App
+// =====================
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// =====================
+// Middleware
+// =====================
 
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseStatusCodePagesWithReExecute("/errores/{0}");
 
+app.UseStatusCodePagesWithReExecute("/errores/{0}");
 
 if (app.Environment.IsDevelopment())
 {
@@ -26,13 +32,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x => x.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod());
+app.UseCors(policy => policy
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
