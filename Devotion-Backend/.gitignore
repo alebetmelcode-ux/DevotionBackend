@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+
+# Build artifacts (en cualquier subcarpeta)
+**/bin/
+**/obj/
+
+# Archivos generados
+*.dll
+*.pdb
+*.cache
+*.log
+*.deps.json
+
+# Publicación
+**/PublishProfiles/
+
+# Configs locales
+appsettings.Development.json
